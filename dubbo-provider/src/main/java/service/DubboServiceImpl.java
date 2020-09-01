@@ -1,44 +1,59 @@
 package service;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.annotation.PostConstruct;
-
+import domain.DubboServiceQuery;
+import domain.DubboServiceResult;
+import me.dslztx.assist.util.ObjectAssist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import domain.DubboServiceQuery;
-import domain.DubboServiceResult;
-import me.dslztx.assist.util.ObjectAssist;
+import javax.annotation.PostConstruct;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-// todo
 @Service
 public class DubboServiceImpl implements DubboService {
 
     private static final Logger logger = LoggerFactory.getLogger(DubboServiceImpl.class);
 
-    private volatile AtomicInteger counter = new AtomicInteger(0);
+    private AtomicInteger counter = new AtomicInteger(0);
+
+    private ReadWriteLock rwLock = new ReentrantReadWriteLock();
 
     @Scheduled(fixedRate = 1000 * 60)
     public synchronized void stat() {
         // 避免Dubbo起来即停止
 
-        AtomicInteger oldCounter = counter;
+        rwLock.writeLock().lock();
+        try {
+            AtomicInteger oldCounter = counter;
 
-        counter = new AtomicInteger(0);
+            counter = new AtomicInteger(0);
 
-        logger.info("request num [{}] in 1 minute", oldCounter.get());
+            logger.info("request num [{}] in 1 minute", oldCounter.get());
+        } finally {
+            rwLock.writeLock().unlock();
+        }
     }
 
     @PostConstruct
     public void init() {
-        logger.info("init Dubbo Service instance");
+        logger.info("init Dubbo Service instance successfully");
     }
 
     @Override
     public DubboServiceResult invoke(DubboServiceQuery query) {
+        rwLock.readLock().lock();
+        try {
+            return invoke0(query);
+        } finally {
+            rwLock.readLock().unlock();
+        }
+    }
+
+    private DubboServiceResult invoke0(DubboServiceQuery query) {
         counter.incrementAndGet();
 
         if (ObjectAssist.isNull(query) || ObjectAssist.isNull(query.getPerson())) {
