@@ -47,6 +47,8 @@ public class DubboServiceImpl implements DubboService {
     public DubboServiceResult invoke(DubboServiceQuery query) {
         rwLock.readLock().lock();
         try {
+            counter.incrementAndGet();
+
             return invoke0(query);
         } finally {
             rwLock.readLock().unlock();
@@ -54,8 +56,6 @@ public class DubboServiceImpl implements DubboService {
     }
 
     private DubboServiceResult invoke0(DubboServiceQuery query) {
-        counter.incrementAndGet();
-
         if (ObjectAssist.isNull(query) || ObjectAssist.isNull(query.getPerson())) {
             throw new RuntimeException("illegal query argument");
         }
