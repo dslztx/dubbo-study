@@ -41,7 +41,7 @@
         <spring.version>5.0.12.RELEASE</spring.version>
         <mybatis.version>3.3.0</mybatis.version>
         <reflections.version>0.9.10</reflections.version>
-        <dubbo.version>2.6.5</dubbo.version>
+        <dubbo.version>2.7.6</dubbo.version>
         <disrupto.version>3.4.2</disrupto.version>
         <assist.version>2.0.50</assist.version>
 
@@ -243,7 +243,7 @@
             </dependency>
 
             <dependency>
-                <groupId>com.alibaba</groupId>
+                <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo</artifactId>
                 <version>${dubbo.version}</version>
             </dependency>

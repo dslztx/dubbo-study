@@ -1,5 +1,6 @@
 package app;
 
+import org.apache.dubbo.config.ServiceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -8,8 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-
-import com.alibaba.dubbo.config.ServiceConfig;
 
 import config.DubboProperties;
 import service.DubboService;

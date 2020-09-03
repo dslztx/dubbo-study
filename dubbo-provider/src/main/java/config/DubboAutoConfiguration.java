@@ -1,11 +1,10 @@
 package config;
 
+import org.apache.dubbo.config.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.alibaba.dubbo.config.*;
 
 @Configuration
 @EnableConfigurationProperties({DubboProperties.class})

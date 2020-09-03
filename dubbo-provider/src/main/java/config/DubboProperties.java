@@ -3,10 +3,9 @@ package config;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.dubbo.config.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
-
-import com.alibaba.dubbo.config.*;
 
 @ConfigurationProperties(prefix = "dubbo")
 public class DubboProperties {
