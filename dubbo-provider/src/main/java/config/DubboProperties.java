@@ -32,13 +32,13 @@ public class DubboProperties {
     @NestedConfigurationProperty
     private ConsumerConfig consumer;
 
-    private Map<String, ApplicationConfig> applications = new LinkedHashMap();
-    private Map<String, ModuleConfig> modules = new LinkedHashMap();
-    private Map<String, RegistryConfig> registries = new LinkedHashMap();
-    private Map<String, ProtocolConfig> protocols = new LinkedHashMap();
-    private Map<String, MonitorConfig> monitors = new LinkedHashMap();
-    private Map<String, ProviderConfig> providers = new LinkedHashMap();
-    private Map<String, ConsumerConfig> consumers = new LinkedHashMap();
+    private Map<String, ApplicationConfig> applications = new LinkedHashMap<>();
+    private Map<String, ModuleConfig> modules = new LinkedHashMap<>();
+    private Map<String, RegistryConfig> registries = new LinkedHashMap<>();
+    private Map<String, ProtocolConfig> protocols = new LinkedHashMap<>();
+    private Map<String, MonitorConfig> monitors = new LinkedHashMap<>();
+    private Map<String, ProviderConfig> providers = new LinkedHashMap<>();
+    private Map<String, ConsumerConfig> consumers = new LinkedHashMap<>();
 
     public DubboProperties() {}
 

@@ -1,6 +1,7 @@
 package app;
 
 import org.apache.dubbo.config.ServiceConfig;
+import org.apache.dubbo.config.bootstrap.DubboBootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -30,24 +31,30 @@ public class DubboApplication {
     }
 
     @Bean
-    public ServiceConfig<DubboService> dubboServiceConfig(DubboProperties dubboProperties, DubboService dubboService) {
+    public DubboBootstrap dubboBootstrap(DubboProperties dubboProperties, DubboService dubboService) {
 
-        logger.info("dubbo service config : {}", dubboProperties);
+        logger.info("dubbo starting : {}", dubboProperties);
 
-        ServiceConfig<DubboService> serviceConfig = new ServiceConfig<>();
-        serviceConfig.setApplication(dubboProperties.getApplication());
-        serviceConfig.setProtocol(dubboProperties.getProtocol());
-        serviceConfig.setRegistry(dubboProperties.getRegistry());
-        serviceConfig.setProvider(dubboProperties.getProvider());
+        ServiceConfig<DubboService> service = new ServiceConfig<>();
+        service.setInterface(DubboService.class);
+        service.setRef(dubboService);
 
-        serviceConfig.setInterface(DubboService.class);
+        DubboBootstrap bootstrap = DubboBootstrap.getInstance();
 
-        serviceConfig.setRef(dubboService);
-        serviceConfig.export();
+        bootstrap.application(dubboProperties.getApplication());
 
-        // todo consumer的属性没有用
+        bootstrap.registry(dubboProperties.getRegistry());
 
-        return serviceConfig;
+        bootstrap.protocol(dubboProperties.getProtocol());
+
+        bootstrap.provider(dubboProperties.getProvider());
+        bootstrap.service(service);
+
+        bootstrap.start();
+
+        logger.info("dubbo start finished");
+
+        return bootstrap;
     }
 
     @Bean
