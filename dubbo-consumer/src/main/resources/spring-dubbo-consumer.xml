@@ -13,6 +13,6 @@
     <dubbo:reference id="dubboService"
                      interface="service.DubboService"
                      timeout="100"
-                     retries="0" group="main"/>
+                     retries="0" group="dubboStudy"/>
 
 </beans>
