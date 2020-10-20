@@ -7,7 +7,7 @@
     <parent>
         <groupId>me.dslztx.study</groupId>
         <artifactId>dubbo-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>dubbo-provider</artifactId>
@@ -116,5 +116,9 @@
             <artifactId>curator-recipes</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-transport-simple-http</artifactId>
+        </dependency>
     </dependencies>
 </project>

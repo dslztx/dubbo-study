@@ -6,7 +6,7 @@
 
     <groupId>me.dslztx.study</groupId>
     <artifactId>dubbo-parent</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -44,6 +44,7 @@
         <dubbo.version>2.7.6</dubbo.version>
         <disrupto.version>3.4.2</disrupto.version>
         <assist.version>2.0.50</assist.version>
+        <sentinel.client.version>1.8.0</sentinel.client.version>
 
         <plugin-compiler.version>3.0</plugin-compiler.version>
         <plugin-compiler.compile.encoding>UTF-8</plugin-compiler.compile.encoding>
@@ -264,6 +265,12 @@
                 <groupId>com.lmax</groupId>
                 <artifactId>disruptor</artifactId>
                 <version>${disrupto.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-transport-simple-http</artifactId>
+                <version>${sentinel.client.version}</version>
             </dependency>
 
         </dependencies>
