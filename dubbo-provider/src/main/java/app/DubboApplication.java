@@ -31,9 +31,9 @@ public class DubboApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(DubboApplication.class);
 
-    private static final String CLUSTER_NAME = "dubboProducer";
+    private static final String SENTINEL_CONFIG_FILE = "sentinel.properties";
 
-    private static final String NACOS_SERVER = "nacos.properties";
+    private static final String NACOS_CONFIG_FILE = "nacos.properties";
 
     public static void main(String[] args) {
 
@@ -77,9 +77,10 @@ public class DubboApplication {
         try {
             String groupId = "dubbo";
 
-            String dataId = CLUSTER_NAME + "-flow-rules";
+            String projectName = ConfigLoadAssist.propConfig(SENTINEL_CONFIG_FILE).getString("project.name");
+            String dataId = projectName + "-flow-rules";
 
-            String servers = ConfigLoadAssist.propConfig(NACOS_SERVER).getString("nacos.servers");
+            String servers = ConfigLoadAssist.propConfig(NACOS_CONFIG_FILE).getString("nacos.servers");
 
             ReadableDataSource<String, List<FlowRule>> flowRuleDataSource = new NacosDataSource<>(servers, groupId,
                 dataId, source -> JSON.parseObject(source, new TypeReference<List<FlowRule>>() {}));

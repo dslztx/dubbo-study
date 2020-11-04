@@ -23,9 +23,9 @@ import util.SentinelBlockExceptionRecognizeUtils;
 public class DubboClient {
     private static final Logger logger = LoggerFactory.getLogger(DubboClient.class);
 
-    private static final String CLUSTER_NAME = "dubboConsumer";
+    private static final String SENTINEL_CONFIG_FILE = "sentinel.properties";
 
-    private static final String NACOS_SERVER = "nacos.properties";
+    private static final String NACOS_CONFIG_FILE = "nacos.properties";
 
     private static DubboService dubboService;
 
@@ -48,9 +48,10 @@ public class DubboClient {
         try {
             String groupId = "dubbo";
 
-            String dataId = CLUSTER_NAME + "-degrade-rules";
+            String projectName = ConfigLoadAssist.propConfig(SENTINEL_CONFIG_FILE).getString("project.name");
+            String dataId = projectName + "-degrade-rules";
 
-            String servers = ConfigLoadAssist.propConfig(NACOS_SERVER).getString("nacos.servers");
+            String servers = ConfigLoadAssist.propConfig(NACOS_CONFIG_FILE).getString("nacos.servers");
 
             ReadableDataSource<String, List<DegradeRule>> degradeRuleDataSource = new NacosDataSource<>(servers,
                 groupId, dataId, source -> JSON.parseObject(source, new TypeReference<List<DegradeRule>>() {}));
