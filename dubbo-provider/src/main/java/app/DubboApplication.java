@@ -1,5 +1,7 @@
 package app;
 
+import java.util.List;
+
 import org.apache.dubbo.config.ServiceConfig;
 import org.apache.dubbo.config.bootstrap.DubboBootstrap;
 import org.slf4j.Logger;
@@ -11,7 +13,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
+import com.alibaba.csp.sentinel.datasource.ReadableDataSource;
+import com.alibaba.csp.sentinel.datasource.nacos.NacosDataSource;
+import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
+import com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+
 import config.DubboProperties;
+import me.dslztx.assist.util.ConfigLoadAssist;
 import service.DubboService;
 
 @EnableScheduling
@@ -20,6 +30,10 @@ import service.DubboService;
 public class DubboApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(DubboApplication.class);
+
+    private static final String CLUSTER_NAME = "dubboProducer";
+
+    private static final String NACOS_SERVER = "nacos.properties";
 
     public static void main(String[] args) {
 
@@ -54,7 +68,25 @@ public class DubboApplication {
 
         logger.info("dubbo start finished");
 
+        registerSentinelFlowRuleManager();
+
         return bootstrap;
+    }
+
+    private void registerSentinelFlowRuleManager() {
+        try {
+            String groupId = "dubbo";
+
+            String dataId = CLUSTER_NAME + "-flow-rules";
+
+            String servers = ConfigLoadAssist.propConfig(NACOS_SERVER).getString("nacos.servers");
+
+            ReadableDataSource<String, List<FlowRule>> flowRuleDataSource = new NacosDataSource<>(servers, groupId,
+                dataId, source -> JSON.parseObject(source, new TypeReference<List<FlowRule>>() {}));
+            FlowRuleManager.register2Property(flowRuleDataSource.getProperty());
+        } catch (Exception e) {
+            logger.error("", e);
+        }
     }
 
     @Bean
