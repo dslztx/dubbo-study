@@ -2,6 +2,7 @@ package service;
 
 import java.util.List;
 
+import org.apache.dubbo.rpc.RpcContext;
 import org.apache.dubbo.rpc.RpcException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,9 @@ import domain.DubboServiceQuery;
 import domain.DubboServiceResult;
 import domain.Person;
 import me.dslztx.assist.util.ConfigLoadAssist;
+import me.dslztx.assist.util.ObjectAssist;
 import me.dslztx.assist.util.RandomAssist;
+import me.dslztx.assist.util.StringAssist;
 import util.SentinelBlockExceptionRecognizeUtils;
 
 public class DubboClient {
@@ -69,6 +72,8 @@ public class DubboClient {
                 Person person = new Person("dslztx", RandomAssist.randomInt(0, 100));
 
                 try {
+                    retainRpcContext();
+
                     DubboServiceResult result = dubboService.invoke(new DubboServiceQuery(person));
                     logger.info(result.getMsg());
                 } catch (RpcException e) {
@@ -84,6 +89,8 @@ public class DubboClient {
                     }
                 } catch (Exception e) {
                     logger.error("", e);
+                } finally {
+                    printRemoteServerAndClearRpcContext();
                 }
 
             }
@@ -94,5 +101,20 @@ public class DubboClient {
                 logger.error("", e);
             }
         }
+    }
+
+    private static void retainRpcContext() {
+        RpcContext.getContext().clearAfterEachInvoke(false);
+    }
+
+    private static void printRemoteServerAndClearRpcContext() {
+        if (ObjectAssist.isNotNull(RpcContext.getContext())
+            && StringAssist.isNotBlank(RpcContext.getContext().getRemoteHost())) {
+            logger.info("remote host: {}", RpcContext.getContext().getRemoteHost());
+        }
+
+        RpcContext.getContext().clearAfterEachInvoke(true);
+
+        RpcContext.removeContext();
     }
 }
