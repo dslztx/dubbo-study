@@ -6,7 +6,7 @@
 
     <groupId>me.dslztx.study</groupId>
     <artifactId>dubbo-parent</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -43,7 +43,7 @@
         <reflections.version>0.9.10</reflections.version>
         <dubbo.version>2.7.8</dubbo.version>
         <disrupto.version>3.4.2</disrupto.version>
-        <assist.version>2.0.50</assist.version>
+        <assist.version>3.0.12</assist.version>
         <sentinel.version>1.8.0</sentinel.version>
         <nacos.version>1.3.2</nacos.version>
 
